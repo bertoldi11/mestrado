@@ -1,0 +1,135 @@
+<?php $dadosQuestoes = $dataProviderQuestoes->getData();?>
+<style>
+	.divConsulta{
+		margin-right: 10px;
+	}
+	
+	div.pull-left{
+		width: 30%;
+		border-left: 1px solid #cccccc;
+		padding-left: 10px;
+	}
+	.btnPadding{
+		margin-bottom: 10px;
+	}
+	fieldset{
+		
+	}
+</style>
+
+<h1>Consulta de Textos</h1>
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+	'id'=>'consulta-form',
+	'enableAjaxValidation'=>false,
+	'action'=> ''
+)); ?>
+	<div class="clearfix" style="width: 100%;">
+		<div class="pull-left divConsulta">
+			<fieldset>
+				<?php 
+					$itens = CHtml::listData(Item::model()->findAll(array('order'=>'idTema, idItem')), 'idItem', 
+						function($item) {
+							return CHtml::encode($item->idTema0->codigo.".".$item->codigo." ".$item->descricao );
+						},
+						function($item){
+							return CHtml::encode($item->idTema0->codigo.". ".$item->idTema0->descricao);
+						}
+					);
+					echo $form->dropDownListRow($modelConsulta,'comboConjunto', $itens, array('class'=>'span2', 'prompt'=>'selecione'));
+				?>
+				<button class="btn btnPadding" id="btnAddConjunto"><span class="icon-plus-sign"></span></button>
+				
+			</fieldset>
+			
+			<table class="items table table-striped" width="90%">
+				<thead>
+					<tr>
+						<th id="yw1_c0">Item</th>
+						<th class="button-column" id="yw1_c3">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="tbodyConjunto">
+					
+				</tbody>
+			</table>
+		</div>
+		<div class="pull-left divConsulta">
+			<fieldset>
+				<?php 
+					$itens = CHtml::listData(Item::model()->findAll(array('order'=>'idTema, idItem')), 'idItem', 
+						function($item) {
+							return CHtml::encode($item->codigo." . ".$item->descricao );
+						},
+						function($item){
+							return CHtml::encode($item->idTema0->codigo." . ".$item->idTema0->descricao);
+						}
+					);
+					echo $form->dropDownListRow($modelConsulta,'comboContem', $itens, array('class'=>'span2', 'prompt'=>'selecione'));
+				?>
+				<button class="btn btnPadding" id="btnAddContem"><span class="icon-plus-sign"></span></button>
+			</fieldset>
+			<table class="items table table-striped" width="90%">
+				<thead>
+					<tr>
+						<th id="yw1_c0">Item</th>
+						<th class="button-column" id="yw1_c3">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="tbodyContem">
+					
+				</tbody>
+			</table>
+		</div>
+		<div class="pull-left">
+			<fieldset>
+				<?php 
+					$itens = CHtml::listData(Item::model()->findAll(array('order'=>'idTema, idItem')), 'idItem', 
+						function($item) {
+							return CHtml::encode($item->codigo." . ".$item->descricao );
+						},
+						function($item){
+							return CHtml::encode($item->idTema0->codigo." . ".$item->idTema0->descricao);
+						}
+					);
+					echo $form->dropDownListRow($modelConsulta,'comboNaoContem', $itens, array('class'=>'span2', 'prompt'=>'selecione'));
+				?>
+				<button class="btn btnPadding" id="btnAddNaoContem"><span class="icon-plus-sign"></span></button>
+			</fieldset>
+			<table class="items table table-striped" width="90%">
+				<thead>
+					<tr>
+						<th id="yw1_c0">Item</th>
+						<th class="button-column" id="yw1_c3">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="tbodyNaoContem">
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+<?php $this->endWidget(); ?>
+
+<script>
+	jQuery(function(){
+		$('#btnAddConjunto').click(function(e){
+			e.preventDefault();
+			var item = $('#ConsultaForm_comboConjunto').val();
+			if(item > 0)
+			{
+				var texto = $('#ConsultaForm_comboConjunto option[value="'+item+'"]').text();
+				var linha=$('<tr>').append('<td>'+texto+'</td>').append('<td><a href="#" class="excluirConjunto" id="temp_'+item+'"><i class="icon-trash"></i></a></td>');;
+				$('#tbodyConjunto').append(linha);
+				
+				$('#consulta-form').append('<input type="hidden" name="Conjunto[]" value="item" />');
+				
+			}
+			else
+			{
+				alert('Selecione um Item');
+				$('#ConsultaForm_comboConjunto').focus();
+			}
+			
+		});
+	});
+</script>
