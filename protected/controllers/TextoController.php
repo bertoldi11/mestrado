@@ -152,6 +152,7 @@ class TextoController extends Controller
 		{
 			$modelFontes = FonteItem::model()->findAllByAttributes(array('idFonte'=>$fonte->idFonte));		
 			
+			$itensFontes[$fonte->idFonte] = array();
 			foreach($modelFontes as $itemFonte)
 			{
 				$itensFontes[$fonte->idFonte][]=$itemFonte->idItem;
