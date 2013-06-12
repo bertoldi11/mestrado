@@ -29,7 +29,7 @@ class FonteItem extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'fonteitem';
+		return 'fonteItem';
 	}
 
 	/**

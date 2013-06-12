@@ -29,7 +29,7 @@ class TextoItem extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'textoitem';
+		return 'textoItem';
 	}
 
 	/**
