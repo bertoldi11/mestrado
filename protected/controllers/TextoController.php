@@ -24,7 +24,7 @@ class TextoController extends Controller
 	{
 		return array( 
 			array('allow', 
-				'actions' => array('novo', 'alterar', 'delete', 'index','analisar', 'salvarAnalise', 'consulta'), 
+				'actions' => array('novo', 'alterar', 'delete', 'index','analisar', 'salvarAnalise', 'consulta', 'buscar'), 
 				'users' => array('*'), 
 			), 
 		);
@@ -46,17 +46,21 @@ class TextoController extends Controller
 			}
 			
 			//Salva os itens da fonte
-			$itensFonte = $_POST['itensFonte'];
-			foreach($itensFonte as $fonte=>$itens)
+			if(isset($_POST['itensFonte']))
 			{
-				FonteItem::model()->deleteAll('idFonte = :idFonte', array(':idFonte'=>$fonte));
-				foreach($itens as $item)
+				$itensFonte = $_POST['itensFonte'];
+				foreach($itensFonte as $fonte=>$itens)
 				{
-					$model = new FonteItem;
-					$model->attributes= array('idFonte'=>$fonte,'idItem'=>$item);
-					$model->save();
+					FonteItem::model()->deleteAll('idFonte = :idFonte', array(':idFonte'=>$fonte));
+					foreach($itens as $item)
+					{
+						$model = new FonteItem;
+						$model->attributes= array('idFonte'=>$fonte,'idItem'=>$item);
+						$model->save();
+					}
 				}
 			}
+			
 
 			Yii::app()->user->setFlash('success', 'Dados Salvos.');
 		}
@@ -66,6 +70,46 @@ class TextoController extends Controller
 		}
 		
 		$this->actionAnalisar($idTexto);
+	}
+	
+	public function actionBuscar()
+	{
+		
+		if(isset($_POST['Conjunto']))
+		{
+			$criteria=new CDbCriteria();
+			$criteria->select('distinct idTexo');
+			
+				
+			$conjunto = implode(',', $_POST['Conjunto']);
+			$textosConjunto = TextoItem::model()->findAll('idItem in('.$conjunto.')');
+			$idsTextos = array();
+			
+			foreach($textosConjunto as $texto)
+			{
+				$idsTextos[]=$texto->idTexto;
+			}
+			
+			echo "<pre>";
+			var_dump($idsTextos);
+			echo "</pre>";
+			
+			$quantConjunto = count($idsTextos);
+			$idsTextos = implode(',', $idsTextos);
+			
+			if(isset($_POST['Contem']))
+			{
+				$contem = implode(',', $_POST['Contem']);
+			}
+
+			if(isset($_POST['NaoContem']))
+			{
+				$naoContem = implode(',', $_POST['Contem']);
+			}
+			
+		}
+		
+		$this->actionConsulta();
 	}
 	
 	public function actionConsulta()
