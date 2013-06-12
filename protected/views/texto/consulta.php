@@ -21,7 +21,7 @@
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'consulta-form',
 	'enableAjaxValidation'=>false,
-	'action'=> ''
+	'action'=> $this->createUrl('texto/buscar')
 )); ?>
 	<div class="clearfix" style="width: 100%;">
 		<div class="pull-left divConsulta">
@@ -58,7 +58,7 @@
 				<?php 
 					$itens = CHtml::listData(Item::model()->findAll(array('order'=>'idTema, idItem')), 'idItem', 
 						function($item) {
-							return CHtml::encode($item->codigo." . ".$item->descricao );
+							return CHtml::encode($item->idTema0->codigo.".".$item->codigo." ".$item->descricao );
 						},
 						function($item){
 							return CHtml::encode($item->idTema0->codigo." . ".$item->idTema0->descricao);
@@ -85,7 +85,7 @@
 				<?php 
 					$itens = CHtml::listData(Item::model()->findAll(array('order'=>'idTema, idItem')), 'idItem', 
 						function($item) {
-							return CHtml::encode($item->codigo." . ".$item->descricao );
+							return CHtml::encode($item->idTema0->codigo.".".$item->codigo." ".$item->descricao );
 						},
 						function($item){
 							return CHtml::encode($item->idTema0->codigo." . ".$item->idTema0->descricao);
@@ -108,9 +108,108 @@
 			</table>
 		</div>
 	</div>
+	<div class="clearfix">
+		<div class="form-actions">
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'buttonType'=>'submit',
+				'type'=>'primary',
+				'label'=>'Buscar',
+			)); ?>
+		</div>
+	</div>
 <?php $this->endWidget(); ?>
 
 <script>
+	// Funções Não Contem
+	jQuery(function(){
+		$('#btnAddNaoContem').click(function(e){
+			e.preventDefault();
+			var item = $('#ConsultaForm_comboNaoContem').val();
+			if(item > 0)
+			{
+				var texto = $('#ConsultaForm_comboNaoContem option[value="'+item+'"]').text();
+				var linha=$('<tr>').append('<td>'+texto+'</td>').append('<td><a href="#" class="excluirNaoContem" id="temp_'+item+'"><i class="icon-trash"></i></a></td>');;
+				$('#tbodyNaoContem').append(linha);
+				
+				$('#consulta-form').append('<input type="hidden" name="NaoContem[]" value="'+item+'" />');
+				
+			}
+			else
+			{
+				alert('Selecione um Item');
+				$('#ConsultaForm_comboNaoContem').focus();
+			}
+			
+		});
+		
+		$('.excluirNaoContem').live('click',function(e){
+			e.preventDefault();
+			
+			if(confirm('Deseja Excluir esse registro?'))
+			{
+				var id = $(this).attr('id');
+			
+				if(id.indexOf('temp_') >= 0)
+				{
+					id = id.replace('temp_', '');
+					
+					$('input[name="NaoContem[]"]').each(function(i,e){
+						if($(this).val() == id){
+							$(this).remove();
+						}
+					});
+					$(this).parent().parent().remove();
+				}
+			}
+		});
+	});
+
+	// Funções Contem
+	jQuery(function(){
+		$('#btnAddContem').click(function(e){
+			e.preventDefault();
+			var item = $('#ConsultaForm_comboContem').val();
+			if(item > 0)
+			{
+				var texto = $('#ConsultaForm_comboContem option[value="'+item+'"]').text();
+				var linha=$('<tr>').append('<td>'+texto+'</td>').append('<td><a href="#" class="excluirContem" id="temp_'+item+'"><i class="icon-trash"></i></a></td>');;
+				$('#tbodyContem').append(linha);
+				
+				$('#consulta-form').append('<input type="hidden" name="Contem[]" value="'+item+'" />');
+				
+			}
+			else
+			{
+				alert('Selecione um Item');
+				$('#ConsultaForm_comboContem').focus();
+			}
+			
+		});
+		
+		$('.excluirContem').live('click',function(e){
+			e.preventDefault();
+			
+			if(confirm('Deseja Excluir esse registro?'))
+			{
+				var id = $(this).attr('id');
+			
+				if(id.indexOf('temp_') >= 0)
+				{
+					id = id.replace('temp_', '');
+					
+					$('input[name="Contem[]"]').each(function(i,e){
+						if($(this).val() == id){
+							$(this).remove();
+						}
+					});
+					$(this).parent().parent().remove();
+				}
+			}
+		});
+	});
+
+
+	// Funções Conjunto
 	jQuery(function(){
 		$('#btnAddConjunto').click(function(e){
 			e.preventDefault();
@@ -121,7 +220,7 @@
 				var linha=$('<tr>').append('<td>'+texto+'</td>').append('<td><a href="#" class="excluirConjunto" id="temp_'+item+'"><i class="icon-trash"></i></a></td>');;
 				$('#tbodyConjunto').append(linha);
 				
-				$('#consulta-form').append('<input type="hidden" name="Conjunto[]" value="item" />');
+				$('#consulta-form').append('<input type="hidden" name="Conjunto[]" value="'+item+'" />');
 				
 			}
 			else
@@ -131,5 +230,28 @@
 			}
 			
 		});
+		
+		$('.excluirConjunto').live('click',function(e){
+			e.preventDefault();
+			
+			if(confirm('Deseja Excluir esse registro?'))
+			{
+				var id = $(this).attr('id');
+			
+				if(id.indexOf('temp_') >= 0)
+				{
+					id = id.replace('temp_', '');
+					
+					$('input[name="Conjunto[]"]').each(function(i,e){
+						if($(this).val() == id){
+							$(this).remove();
+						}
+					});
+					$(this).parent().parent().remove();
+				}
+			}
+		});
 	});
+	
+	
 </script>

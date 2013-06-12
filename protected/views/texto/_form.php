@@ -14,7 +14,11 @@
 					<?php echo $form->textFieldRow($model,'codigo',array('class'=>'span3','maxlength'=>4)); ?>
 				</div>
 				<div class="pull-left" style="margin-left: 15px;">
-					<?php echo $form->datepickerRow($model,'data',array('class'=>'span3')); ?>
+					<?php echo $form->datepickerRow($model,'data',array('class'=>'span3', 'options'=>array(
+						'defaultDate'=>'01/01/2007',
+						'changeMonth'=> true,
+						'changeYear'=> true
+					))); ?>
 				</div>
 			</div>
 			

@@ -21,10 +21,10 @@ $this->breadcrumbs=array(
 						echo "<p class='tema'>$tema->codigo - $tema->descricao</p>";
 						foreach($tema->items as $item):?>
 							<p class="item">
-								<input type="checkbox" name="itensTexto[]" value="<?php echo $item->idItem;?>" title="Texto" />
+								<input type="checkbox" name="itensTexto[]" value="<?php echo $item->idItem;?>" title="Texto" <?php if(in_array($item->idItem, $itensTexto)) echo 'checked'; ?>/>
 								<?php if($categoria->repetir == 'S'):?>
 									<?php foreach($model->fontes as $fonte):?>
-										<input type="checkbox" name="itensFonte[<?php echo $fonte->idFonte;?>][]" title="<?php echo $fonte->nome;?>" value="<?php echo $item->idItem;?>" />
+										<input type="checkbox" <?php if(in_array($item->idItem, $itensFontes[$fonte->idFonte])) echo 'checked';?> name="itensFonte[<?php echo $fonte->idFonte;?>][]" title="<?php echo $fonte->nome;?>" value="<?php echo $item->idItem;?>" />
 									<?php endforeach;?>
 								<?php endif;?>
 								<span><?php echo $tema->codigo;?>.<?php echo $item->codigo;?> - <?php echo $item->descricao;?></span>

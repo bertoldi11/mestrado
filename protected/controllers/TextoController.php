@@ -32,6 +32,8 @@ class TextoController extends Controller
 	
 	public function actionSalvarAnalise()
 	{
+		# TODO: Consulta de texto com os itens de cada um (relatório de exibição).	
+			
 		$idTexto = $_POST['idTexto'];
 		if(isset($_POST['itensTexto']) && count($_POST['itensTexto']) > 0)
 		{
@@ -139,9 +141,29 @@ class TextoController extends Controller
 			)
 		);
 		
+		$itensTexto = array();
+		foreach($model->textoitems as $item)
+		{
+			$itensTexto[] = $item->idItem;
+		}
+		
+		$itensFontes = array();
+		foreach($model->fontes as $fonte)
+		{
+			$modelFontes = FonteItem::model()->findAllByAttributes(array('idFonte'=>$fonte->idFonte));		
+			
+			foreach($modelFontes as $itemFonte)
+			{
+				$itensFontes[$fonte->idFonte][]=$itemFonte->idItem;
+			}
+			
+		}
+
 		$this->render('analisar',array(
 			'model'=>$model,
-			'dataProviderQuestoes'=>$dataProviderQuestoes
+			'dataProviderQuestoes'=>$dataProviderQuestoes,
+			'itensTexto'=>$itensTexto,
+			'itensFontes'=>$itensFontes
 		));
 	}
 	
