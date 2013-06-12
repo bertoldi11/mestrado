@@ -88,7 +88,7 @@ class Texto extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'fontes' => array(self::HAS_MANY, 'Fonte', 'idTexto'),
-			'textoitems' => array(self::HAS_MANY, 'Textoitem', 'idTexto'),
+			'textoitems' => array(self::HAS_MANY, 'TextoItem', 'idTexto'),
 		);
 	}
 
