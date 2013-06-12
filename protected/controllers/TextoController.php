@@ -260,7 +260,7 @@ class TextoController extends Controller
 	public function actionIndex()
 	{
 		$model=(is_null($this->_model)) ? new Texto : $this->_model;		
-		$dataProvider=new CActiveDataProvider('Texto');
+		$dataProvider=new CActiveDataProvider('Texto', array('pagination'=>false));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 			'model'=>$model
