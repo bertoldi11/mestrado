@@ -225,6 +225,18 @@ class TextoController extends Controller
 			$model->attributes=$_POST['Texto'];
 			if($model->save())
 			{
+				if(isset($_POST['Fonte']))
+				{
+					Fonte::model()->deleteAll('idTexto = :idTexto', array(':idTexto'=>$model->idTexto));
+					$fontes = $_POST['Fonte'];					
+					foreach($fontes as $fonte)
+					{
+						$modelFonte = new Fonte;
+						$modelFonte->attributes = array('idTexto'=>$model->idTexto, 'nome'=>$fonte[0]);
+						$modelFonte->save();
+					}
+				}
+				
 				Yii::app()->user->setFlash('success', 'Dados Alterados.');
 				$this->redirect('/texto/index.html');
 			}
