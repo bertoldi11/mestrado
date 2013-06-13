@@ -40,9 +40,21 @@
 					</tr>
 				</thead>
 				<tbody id="tbodyFonte">
-					<tr>
-						<td colspan="4" class="empty"><span class="empty">Nenhuma Fonte adicionada.</span></td>
-					</tr>
+				<?php if($model->isNewRecord):?>
+					<tr><td colspan="2" class="empty">Nenhuma fonte cadastrada</td></tr>
+				<?php else:?>
+					<?php foreach($model->fontes as $fonte):?>
+						<tr>
+							<td>
+								<input type="hidden" name="Fonte_existe[<?php echo $fonte->idFonte;?>][]" value="<?php echo $fonte->nome;?>">
+								<?php echo $fonte->nome;?>
+							</td>
+							<td>
+								<a href="/fonte/excluir" class="excluirFonte" id="<?php echo $fonte->idFonte;?>"><i class="icon-trash"></i></a>
+							</td>
+						</tr>
+					<?php endforeach;?>
+				<?php endif;?>
 				</tbody>
 			</table>
 		</div>
@@ -60,7 +72,7 @@
 </div>
 <script>
 
-	var idFonte = 0;
+	var idFonte = <?php echo (isset($fonte)) ? $fonte->idFonte : 0;?>;
 
 	jQuery('#btnAddFonte').click(function(event){
 		event.preventDefault();
@@ -98,6 +110,7 @@
 		if(confirm('Deseja Excluir esse registro?'))
 		{
 			var id = $(this).attr('id');
+			var link = $(this);
 		
 			/* O prefixo temp_ indica que o dado ainda não está salvo no BD */
 			if(id.indexOf('temp_') >= 0)
@@ -105,6 +118,26 @@
 				id = id.replace('temp_', '');
 				$('input[name="Fonte['+id+'][]"]').remove();			
 				$(this).parent().parent().remove();
+			}
+			else
+			{
+				if(confirm('Excluir essa fonte, exclui também os dados cadastrados pra ela. Tem certeza que quer excluir?'))
+				{//Fazer uma requisição ajax para excluir.
+					$.ajax({
+						url: $(this).attr('href'),
+						dataType: 'json',
+						type: 'post',
+						data: {idFonte: id},
+						
+					}).done(function ( JSON ){
+						if(JSON.MSG){
+							alert(JSON.MSG);
+						}
+						
+						$('input[name="Fonte['+id+'][]"]').remove();			
+						$(link).parent().parent().remove();
+					});
+				}
 			}
 		}
 		

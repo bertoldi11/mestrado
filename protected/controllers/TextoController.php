@@ -92,22 +92,9 @@ class TextoController extends Controller
 				$idsTextos[]=$texto->idTexto;
 			}
 			
-			echo "<pre>";
-			var_dump($idsTextos);
-			echo "</pre>";
-			
+		
 			$quantConjunto = count($idsTextos);
 			$idsTextos = implode(',', $idsTextos);
-			
-			if(isset($_POST['Contem']))
-			{
-				$contem = implode(',', $_POST['Contem']);
-			}
-
-			if(isset($_POST['NaoContem']))
-			{
-				$naoContem = implode(',', $_POST['Contem']);
-			}
 			
 		}
 		
@@ -227,7 +214,6 @@ class TextoController extends Controller
 			{
 				if(isset($_POST['Fonte']))
 				{
-					Fonte::model()->deleteAll('idTexto = :idTexto', array(':idTexto'=>$model->idTexto));
 					$fontes = $_POST['Fonte'];					
 					foreach($fontes as $fonte)
 					{
