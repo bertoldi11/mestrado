@@ -92,9 +92,17 @@ class TextoController extends Controller
 		
 		if(isset($_POST['Conjunto']))
 		{
-			$conjunto = implode(',', $_POST['Conjunto']);			
+			$conjunto = implode(',', $_POST['Conjunto']);
+			$quant = count($_POST['Conjunto']);
+				
+			$criterio = new CDbCriteria();
+			$criterio->select = 'count(`idItem`) as `quant`, `idTexto`';
+			$criterio->condition = "`idItem` in ($conjunto)";
+			$criterio->group = '`idTexto`';
+			$criterio->having = "`quant` = $quant";
+			
 			$textosConjunto = ($data) ? Texto::model()->with('textoitems')->findAll('idItem in('.$conjunto.') AND '.$sqlData)
-									  : TextoItem::model()->findAll('idItem in('.$conjunto.')');
+									  : TextoItem::model()->findAll($criterio);
 			
 			$idsTextos = array();
 			
@@ -102,6 +110,7 @@ class TextoController extends Controller
 			{
 				$idsTextos[$texto->idTexto]=$texto->idTexto;
 			}
+			
 
 			$quantConjunto = count($idsTextos);
 			$idsTextos = implode(',', $idsTextos);			
