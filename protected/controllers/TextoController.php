@@ -90,7 +90,6 @@ class TextoController extends Controller
 		
 		if(isset($_POST['Conjunto']))
 		{
-				
 			$conjunto = implode(',', $_POST['Conjunto']);			
 			$textosConjunto = ($data) ? Texto::model()->with('textoitems')->findAll('idItem in('.$conjunto.') AND '.$sqlData)
 									  : TextoItem::model()->findAll('idItem in('.$conjunto.')');
@@ -101,13 +100,19 @@ class TextoController extends Controller
 			{
 				$idsTextos[$texto->idTexto]=1;
 			}
-		
+			echo "<pre>";
+			var_dump($idsTextos);
+			
 			$quantConjunto = count($idsTextos);
 			$idsTextos = implode(',', $idsTextos);			
 			
 			$textoComItens = TextoItem::model()->findAll('idTexto in('.$idsTextos.') AND idItem in('.$itensContem.')');
+			
+			var_dump($textoComItens);
 					
 			$quantContem = count($textoComItens);
+			
+			echo "<pre>";
 			
 		}
 		elseif(isset($_POST['todos']))
