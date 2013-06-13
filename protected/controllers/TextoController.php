@@ -76,29 +76,75 @@ class TextoController extends Controller
 	
 	public function actionBuscar()
 	{
+		$itensContem = implode(',', $_POST['Contem']);
+		$sqlData = "";
+		$data = false;
+		if(!empty($_POST['dataInicio']) && !empty($_POST['dataFim']))
+		{
+			$data = true;
+			$ini = Texto::inverteData($_POST['dataInicio']);
+			$fim = Texto::inverteData($_POST['dataFim']);
+			
+			$sqlData = "(data between '$ini' and '$fim')";
+		}
 		
 		if(isset($_POST['Conjunto']))
 		{
-			$criteria=new CDbCriteria();
-			$criteria->select('distinct idTexo');
-			
 				
-			$conjunto = implode(',', $_POST['Conjunto']);
-			$textosConjunto = TextoItem::model()->findAll('idItem in('.$conjunto.')');
+			$conjunto = implode(',', $_POST['Conjunto']);			
+			$textosConjunto = ($data) ? Texto::model()->with('textoitems')->findAll('idItem in('.$conjunto.') AND '.$sqlData)
+									  : TextoItem::model()->findAll('idItem in('.$conjunto.')');
+			
 			$idsTextos = array();
 			
 			foreach($textosConjunto as $texto)
 			{
-				$idsTextos[]=$texto->idTexto;
+				$idsTextos[$texto->idTexto]=1;
 			}
-			
 		
 			$quantConjunto = count($idsTextos);
-			$idsTextos = implode(',', $idsTextos);
+			$idsTextos = implode(',', $idsTextos);			
+			
+			$textoComItens = TextoItem::model()->findAll('idTexto in('.$idsTextos.') AND idItem in('.$itensContem.')');
+					
+			$quantContem = count($textoComItens);
 			
 		}
+		elseif(isset($_POST['todos']))
+		{
+			if($data)
+			{
+				$textosConjunto = Texto::model()->findAll($sqlData);
+				$idsTextos = array();
+				
+				foreach($textosConjunto as $texto)
+				{
+					$idsTextos[$texto->idTexto]=1;
+				}
+				
+				$quantConjunto = count($idsTextos);
+				$idsTextos = implode(',', $idsTextos);			
+				
+				$sqlTextoItem = 'idTexto in('.$idsTextos.') AND idItem in('.$itensContem.')';
+
+			}	
+			else
+			{
+				$quantConjunto = Texto::model()->count();				
+				$sqlTextoItem = 'idItem in('.$itensContem.')';				
+			}
+			
+			$textoComItens = TextoItem::model()->findAll($sqlTextoItem);
+			$quantContem = count($textoComItens);	
+		}
 		
-		$this->actionConsulta();
+		$resultado = ($quantContem/$quantConjunto)*100;			
+		$textoResultado = "Dos $quantConjunto textos do conjunto, $quantContem contem os dados procurados. Ou seja: $resultado %.";
+		
+		
+		$this->render('resultado', array(
+			'resultado'=>$textoResultado,			
+		));
 	}
 	
 	public function actionConsulta()

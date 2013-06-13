@@ -74,7 +74,7 @@ class Texto extends CActiveRecord
 		$dados = explode(" ", $date);
 		$data = explode("/",$dados[0]);
 	        if(count($dados) == 1)
-	            return $data[2]."/".$data[1]."/".$data[0];
+	            return $data[2]."-".$data[1]."-".$data[0];
 	        else
 	            return $data[2]."/".$data[1]."/".$data[0]." - ".$dados[1];
 	}

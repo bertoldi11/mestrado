@@ -4,7 +4,7 @@
 		margin-right: 10px;
 	}
 	
-	div.pull-left{
+	div.borda{
 		width: 30%;
 		border-left: 1px solid #cccccc;
 		padding-left: 10px;
@@ -23,8 +23,22 @@
 	'enableAjaxValidation'=>false,
 	'action'=> $this->createUrl('texto/buscar')
 )); ?>
-	<div class="clearfix" style="width: 100%;">
+	<div class="clearfix">
 		<div class="pull-left divConsulta">
+			<label>Início</label>
+			<input type="text" name="dataInicio" class="span2" />
+		</div>
+		<div class="pull-left divConsulta">
+			<label>Fim</label>
+			<input type="text" name="dataFim"class="span2" />
+		</div>
+	</div>
+	<div style="clearfix">
+		<p style="padding: 0;"><input id="checkTodosTexto" type="checkBox" name="todos" /> Todos os textos</p>
+	</div>
+	<hr>
+	<div class="clearfix" style="width: 100%;">
+		<div class="pull-left divConsulta borda">
 			<fieldset>
 				<?php 
 					$itens = CHtml::listData(Item::model()->findAll(array('order'=>'idTema, idItem')), 'idItem', 
@@ -53,7 +67,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="pull-left divConsulta">
+		<div class="pull-left divConsulta borda">
 			<fieldset>
 				<?php 
 					$itens = CHtml::listData(Item::model()->findAll(array('order'=>'idTema, idItem')), 'idItem', 
@@ -80,33 +94,36 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="pull-left">
-			<fieldset>
-				<?php 
-					$itens = CHtml::listData(Item::model()->findAll(array('order'=>'idTema, idItem')), 'idItem', 
-						function($item) {
-							return CHtml::encode($item->idTema0->codigo.".".$item->codigo." ".$item->descricao );
-						},
-						function($item){
-							return CHtml::encode($item->idTema0->codigo." . ".$item->idTema0->descricao);
-						}
-					);
-					echo $form->dropDownListRow($modelConsulta,'comboNaoContem', $itens, array('class'=>'span2', 'prompt'=>'selecione'));
-				?>
-				<button class="btn btnPadding" id="btnAddNaoContem"><span class="icon-plus-sign"></span></button>
-			</fieldset>
-			<table class="items table table-striped" width="90%">
-				<thead>
-					<tr>
-						<th id="yw1_c0">Item</th>
-						<th class="button-column" id="yw1_c3">&nbsp;</th>
-					</tr>
-				</thead>
-				<tbody id="tbodyNaoContem">
-					
-				</tbody>
-			</table>
-		</div>
+		<!--
+			Subistituir por Fontes
+			<div class="pull-left">
+				<fieldset>
+					<?php 
+						$itens = CHtml::listData(Item::model()->findAll(array('order'=>'idTema, idItem')), 'idItem', 
+							function($item) {
+								return CHtml::encode($item->idTema0->codigo.".".$item->codigo." ".$item->descricao );
+							},
+							function($item){
+								return CHtml::encode($item->idTema0->codigo." . ".$item->idTema0->descricao);
+							}
+						);
+						echo $form->dropDownListRow($modelConsulta,'comboNaoContem', $itens, array('class'=>'span2', 'prompt'=>'selecione'));
+					?>
+					<button class="btn btnPadding" id="btnAddNaoContem"><span class="icon-plus-sign"></span></button>
+				</fieldset>
+				<table class="items table table-striped" width="90%">
+					<thead>
+						<tr>
+							<th id="yw1_c0">Item</th>
+							<th class="button-column" id="yw1_c3">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody id="tbodyNaoContem">
+						
+					</tbody>
+				</table>
+			</div>
+		-->
 	</div>
 	<div class="clearfix">
 		<div class="form-actions">
@@ -120,6 +137,14 @@
 <?php $this->endWidget(); ?>
 
 <script>
+
+	//Validação do checkbox todos os textos. Ser marcado, desabilita o combo	
+	$('#checkTodosTexto').click(function(){
+		var status = $(this).attr('checked')=='checked'?true:false;
+		$('#ConsultaForm_comboConjunto').attr('disabled',status);
+		$('#btnAddConjunto').attr('disabled',status);
+	});
+
 	// Funções Não Contem
 	jQuery(function(){
 		$('#btnAddNaoContem').click(function(e){
