@@ -98,7 +98,7 @@ class TextoController extends Controller
 			
 			foreach($textosConjunto as $texto)
 			{
-				$idsTextos[$texto->idTexto]=1;
+				$idsTextos[$texto->idTexto]=$texto->idTexto;
 			}
 			echo "<pre>";
 			var_dump($idsTextos);
