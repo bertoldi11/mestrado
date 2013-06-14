@@ -96,12 +96,12 @@ class TextoController extends Controller
 			$quant = count($_POST['Conjunto']);
 				
 			$criterio = new CDbCriteria();
-			$criterio->select = 'count(`idItem`) as `quant`, `idTexto`';
-			$criterio->condition = "`idItem` in ($conjunto)";
-			$criterio->group = '`idTexto`';
+			$criterio->select = 'count(idItem) as quant,idTexto';
+			$criterio->condition =($data) ? "`idItem` in ($conjunto) AND ".$sqlData: "`idItem` in ($conjunto)";
+			$criterio->group = 't.idTexto';
 			$criterio->having = "`quant` = $quant";
 			
-			$textosConjunto = ($data) ? Texto::model()->with('textoitems')->findAll('idItem in('.$conjunto.') AND '.$sqlData)
+			$textosConjunto = ($data) ? TextoItem::model()->with('idTexto0')->findAll($criterio)
 									  : TextoItem::model()->findAll($criterio);
 			
 			$idsTextos = array();
