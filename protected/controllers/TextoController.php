@@ -106,22 +106,31 @@ class TextoController extends Controller
 			
 			$idsTextos = array();
 			
-			foreach($textosConjunto as $texto)
+			
+			if(count($textosConjunto) > 0)
 			{
-				$idsTextos[$texto->idTexto]=$texto->idTexto;
+				foreach($textosConjunto as $texto)
+				{
+					$idsTextos[$texto->idTexto]=$texto->idTexto;
+				}
+				
+	
+				$quantConjunto = count($idsTextos);
+				$idsTextos = implode(',', $idsTextos);			
+			
+				$textoComItens = TextoItem::model()->findAll('idTexto in('.$idsTextos.') AND idItem in('.$itensContem.')');
+	
+				$quantContem = count($textoComItens);
+				
+				foreach($textoComItens as $item)
+				{
+					$textosContem[] = $item->idTexto;
+				}
 			}
-			
-
-			$quantConjunto = count($idsTextos);
-			$idsTextos = implode(',', $idsTextos);			
-			
-			$textoComItens = TextoItem::model()->findAll('idTexto in('.$idsTextos.') AND idItem in('.$itensContem.')');
-
-			$quantContem = count($textoComItens);
-			
-			foreach($textoComItens as $item)
+			else
 			{
-				$textosContem[] = $item->idTexto;
+				$quantConjunto = 0;
+				$quantContem = 0;
 			}
 		}
 		elseif(isset($_POST['todos']))
@@ -152,10 +161,14 @@ class TextoController extends Controller
 			$quantContem = count($textoComItens);	
 		}
 		
-		$resultado = ($quantContem/$quantConjunto)*100;			
-		$textoResultado = "Dos $quantConjunto textos do conjunto, $quantContem contem os dados procurados. Ou seja: $resultado %.";
+		$textoResultado = "Nenhum texto foi localizado com os parametros de conjunto.";
 		
-		
+		if($quantConjunto > 0)
+		{		
+			$resultado = ($quantContem/$quantConjunto)*100;			
+			$textoResultado = "Dos $quantConjunto textos do conjunto, $quantContem contem os dados procurados. Ou seja: $resultado %.";
+		}
+
 		$this->render('resultado', array(
 			'resultado'=>$textoResultado,
 			'textosContem'=>$textosContem	
