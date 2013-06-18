@@ -14,6 +14,7 @@
  */
 class FonteItem extends CActiveRecord
 {
+	public $quant=0;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.

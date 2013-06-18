@@ -24,10 +24,22 @@ class TextoController extends Controller
 	{
 		return array( 
 			array('allow', 
-				'actions' => array('novo', 'alterar', 'delete', 'index','analisar', 'salvarAnalise', 'consulta', 'buscar'), 
+				'actions' => array('novo', 'alterar', 'delete', 'index','analisar', 'salvarAnalise', 'consulta', 'buscar','totalFontes'), 
 				'users' => array('*'), 
 			), 
 		);
+	}
+	
+	public function actionTotalFontes()
+	{
+		$criteriaTotalItens = new CDbCriteria();
+		$criteriaTotalItens->select = 'COUNT(idFonte) as quant, t.idItem';
+		$criteriaTotalItens->group = 't.idItem';
+		$criteriaTotalItens->order = 't.idItem';
+		
+		$this->render('totalfontes', array(
+			'totalItens'=>FonteItem::model()->with('idItem0')->findAll($criteriaTotalItens),
+		));
 	}
 	
 	public function actionSalvarAnalise()

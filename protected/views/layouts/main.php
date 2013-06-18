@@ -35,6 +35,7 @@
 				array('label'=>'Item', 'url'=>array('item/index')),
 				array('label'=>'Texto', 'url'=>array('texto/index')),
 				array('label'=>'Consultas', 'url'=>array('texto/consulta')),
+				array('label'=>'Total Fontes', 'url'=>array('texto/totalfontes')),
 				/*
 					array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 					array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
