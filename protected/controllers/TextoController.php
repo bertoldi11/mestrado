@@ -38,7 +38,7 @@ class TextoController extends Controller
 		$criteriaTotalItens->order = 't.idItem';
 		
 		$this->render('totalfontes', array(
-			'totalItens'=>FonteItem::model()->with('idItem0')->findAll($criteriaTotalItens),
+			'totalItens'=>FonteItem::model()->with('idItem0','idItem0.idTema0')->findAll($criteriaTotalItens),
 		));
 	}
 	
