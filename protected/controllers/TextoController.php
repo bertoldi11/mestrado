@@ -24,10 +24,89 @@ class TextoController extends Controller
 	{
 		return array( 
 			array('allow', 
-				'actions' => array('novo', 'alterar', 'delete', 'index','analisar', 'salvarAnalise', 'consulta', 'buscar','totalFontes'), 
+				'actions' => array('novo', 'alterar', 'delete', 'index','analisar', 'salvarAnalise', 'consulta', 'buscar','totalFontes','consultaFontes','buscarFontes'), 
 				'users' => array('*'), 
 			), 
 		);
+	}
+	
+	public function actionBuscarFontes()
+	{
+		$itensFonte = implode(',', $_POST['Fonte']);
+		$sqlData = "";
+		$data = false;
+		$fontesContem = array();
+		
+		if(isset($_POST['Conjunto']))
+		{
+			$conjunto = implode(',', $_POST['Conjunto']);
+			$quant = count($_POST['Conjunto']);
+			
+			$criterio = new CDbCriteria();
+			$criterio->select = 'idFonte';
+			$criterio->condition ="`idItem` in ($conjunto)";
+
+			$fontesConjunto = FonteItem::model()->findAll($criterio);
+			
+			$idsFontes= array();
+			
+			if(count($fontesConjunto) > 0)
+			{
+				foreach($fontesConjunto as $fonte)
+				{
+					$idsFontes[$fonte->idFonte]=$fonte->idFonte;
+				}
+				
+	
+				$quantConjunto = count($idsFontes);
+				$idsFontes = implode(',', $idsFontes);			
+			
+				$fontesComItens = FonteItem::model()->findAll('idFonte in('.$idsFontes.') AND idItem in('.$itensFonte.')');
+	
+				$quantContem = count($fontesComItens);
+				
+				foreach($fontesComItens as $item)
+				{
+					$fontesContem[] = $item->idFonte;
+				}
+			}
+			else
+			{
+				$quantConjunto = 0;
+				$quantContem = 0;
+			}
+		}
+		elseif(isset($_POST['todos']))
+		{
+
+			$quantConjunto = Fonte::model()->count();				
+			$sqlFonteItem = 'idItem in('.$itensFonte.')';				
+			
+			$fontesComItens = FonteItem::model()->findAll($sqlFonteItem);
+			$quantContem = count($fontesComItens);	
+		}
+		
+		$textoResultado = "Nenhuma fonte foi localizada com os parametros de conjunto.";
+		
+		if($quantConjunto > 0)
+		{		
+			$resultado = round(($quantContem/$quantConjunto)*100,2);			
+			$textoResultado = "Das $quantConjunto Fontes do conjunto, $quantContem contem os dados procurados. Ou seja: $resultado %.";
+		}
+
+		$this->render('resultado', array(
+			'resultado'=>$textoResultado,
+			'textosContem'=>$fontesContem	
+		));
+	}
+	
+	public function actionConsultaFontes()
+	{
+		$modelConsulta = new ConsultaFonteForm;	
+
+		$this->render('consultafonte', array(
+			'modelConsulta'=>$modelConsulta,			
+		));
 	}
 	
 	public function actionTotalFontes()
@@ -177,7 +256,7 @@ class TextoController extends Controller
 		
 		if($quantConjunto > 0)
 		{		
-			$resultado = ($quantContem/$quantConjunto)*100;			
+			$resultado = round(($quantContem/$quantConjunto)*100,2);			
 			$textoResultado = "Dos $quantConjunto textos do conjunto, $quantContem contem os dados procurados. Ou seja: $resultado %.";
 		}
 
@@ -190,15 +269,7 @@ class TextoController extends Controller
 	public function actionConsulta()
 	{
 		$modelConsulta = new ConsultaForm;	
-			
-		$dataProviderQuestoes=new CActiveDataProvider('Categoria', array(
-				'criteria'=>array(
-					'with'=>array('temas', 'temas.items')
-				),				
-			)
-		);	
 		$this->render('consulta', array(
-			'dataProviderQuestoes'=>$dataProviderQuestoes,
 			'modelConsulta'=>$modelConsulta,			
 		));
 	}

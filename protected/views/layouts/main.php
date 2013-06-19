@@ -34,7 +34,8 @@
 				array('label'=>'Tema', 'url'=>array('tema/index')),
 				array('label'=>'Item', 'url'=>array('item/index')),
 				array('label'=>'Texto', 'url'=>array('texto/index')),
-				array('label'=>'Consultas', 'url'=>array('texto/consulta')),
+				array('label'=>'Consulta Textos', 'url'=>array('texto/consulta')),
+				array('label'=>'Consulta Fontes', 'url'=>array('texto/consultafontes')),
 				array('label'=>'Total Fontes', 'url'=>array('texto/totalfontes')),
 				/*
 					array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
