@@ -22,18 +22,20 @@
 	'enableAjaxValidation'=>false,
 	'action'=> $this->createUrl('texto/buscarfontes')
 )); ?>
-	<div class="clearfix">
-		<div class="pull-left divConsulta">
-			<label>Início</label>
-			<input type="text" name="dataInicio" class="span2" />
+	<!--
+		<div class="clearfix">
+			<div class="pull-left divConsulta">
+				<label>Início</label>
+				<input type="text" name="dataInicio" class="span2" />
+			</div>
+			<div class="pull-left divConsulta">
+				<label>Fim</label>
+				<input type="text" name="dataFim"class="span2" />
+			</div>
 		</div>
-		<div class="pull-left divConsulta">
-			<label>Fim</label>
-			<input type="text" name="dataFim"class="span2" />
-		</div>
-	</div>
+	-->
 	<div style="clearfix">
-		<p style="padding: 0;"><input id="checkTodosTexto" type="checkBox" name="todos" /> Todos as fontes.</p>
+		<p style="padding: 0;"><input id="checkTodosTexto" type="checkBox" name="todos" /> Todas as fontes.</p>
 	</div>
 	<hr>
 	<div class="clearfix" style="width: 100%;">
