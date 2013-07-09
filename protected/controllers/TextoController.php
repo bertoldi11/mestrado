@@ -67,11 +67,6 @@ class TextoController extends Controller
 				$fontesComItens = FonteItem::model()->findAll('idFonte in('.$idsFontes.') AND idItem in('.$itensFonte.')');
 	
 				$quantContem = count($fontesComItens);
-				
-				foreach($fontesComItens as $item)
-				{
-					$fontesContem[] = $item->idFonte;
-				}
 			}
 			else
 			{
@@ -96,10 +91,11 @@ class TextoController extends Controller
 			$resultado = round(($quantContem/$quantConjunto)*100,2);			
 			$textoResultado = "Das $quantConjunto Fontes do conjunto, $quantContem contem os dados procurados. Ou seja: $resultado %.";
 		}
-
+		
+	
 		$this->render('resultado', array(
 			'resultado'=>$textoResultado,
-			'textosContem'=>$fontesContem	
+			'textosContem'=>array()	
 		));
 	}
 	
