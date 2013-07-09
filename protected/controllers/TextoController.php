@@ -25,8 +25,11 @@ class TextoController extends Controller
 		return array( 
 			array('allow', 
 				'actions' => array('novo', 'alterar', 'delete', 'index','analisar', 'salvarAnalise', 'consulta', 'buscar','totalFontes','consultaFontes','buscarFontes'), 
-				'users' => array('*'), 
+				'users' => array('@'), 
 			), 
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
 		);
 	}
 	
@@ -249,7 +252,12 @@ class TextoController extends Controller
 			}
 			
 			$textoComItens = TextoItem::model()->findAll($sqlTextoItem);
-			$quantContem = count($textoComItens);	
+			$quantContem = count($textoComItens);
+			
+			foreach($textoComItens as $item)
+			{
+				$textosContem[] = $item->idTexto;
+			}
 		}
 		
 		$textoResultado = "Nenhum texto foi localizado com os parametros de conjunto.";
@@ -259,10 +267,12 @@ class TextoController extends Controller
 			$resultado = round(($quantContem/$quantConjunto)*100,2);			
 			$textoResultado = "Dos $quantConjunto textos do conjunto, $quantContem contem os dados procurados. Ou seja: $resultado %.";
 		}
+		
+		$resTextoContem = Texto::model()->findAll('idTexto in('.implode(',', $textosContem).')');
 
 		$this->render('resultado', array(
 			'resultado'=>$textoResultado,
-			'textosContem'=>$textosContem	
+			'textosContem'=>$resTextoContem	
 		));
 	}
 	

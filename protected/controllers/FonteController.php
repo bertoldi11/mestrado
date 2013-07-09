@@ -24,8 +24,11 @@ class FonteController extends Controller
 		return array( 
 			array('allow', 
 				'actions' => array('excluir'), 
-				'users' => array('*'), 
-			), 
+				'users' => array('@'), 
+			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
 		);
 	}
 	

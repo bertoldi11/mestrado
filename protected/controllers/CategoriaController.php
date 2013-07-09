@@ -25,8 +25,11 @@ class CategoriaController extends Controller
 		return array( 
 			array('allow', 
 				'actions' => array('novo', 'alterar', 'delete', 'index'), 
-				'users' => array('*'), 
-			), 
+				'users' => array('@'), 
+			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
 		);
 	}
 

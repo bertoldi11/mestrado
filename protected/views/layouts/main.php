@@ -30,17 +30,15 @@
 		<?php $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
 				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'Categoria', 'url'=>array('categoria/index')),
-				array('label'=>'Tema', 'url'=>array('tema/index')),
-				array('label'=>'Item', 'url'=>array('item/index')),
-				array('label'=>'Texto', 'url'=>array('texto/index')),
-				array('label'=>'Consulta Textos', 'url'=>array('texto/consulta')),
-				array('label'=>'Consulta Fontes', 'url'=>array('texto/consultafontes')),
-				array('label'=>'Total Fontes', 'url'=>array('texto/totalfontes')),
-				/*
-					array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-					array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-				 */
+				array('label'=>'Categoria', 'url'=>array('categoria/index'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Tema', 'url'=>array('tema/index'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Item', 'url'=>array('item/index'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Texto', 'url'=>array('texto/index'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Consulta Textos', 'url'=>array('texto/consulta'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Consulta Fontes', 'url'=>array('texto/consultafontes'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Total Fontes', 'url'=>array('texto/totalfontes'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
+				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
 		)); ?>
 	</div><!-- mainmenu -->

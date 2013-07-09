@@ -1,10 +1,15 @@
 <h1>Resultado da consulta</h1>
 
 <div>
-	<?php echo $resultado;?>
+	<b><?php echo $resultado;?></b>
 </div>
 <div>
-	<pre>
-		<?php print_r($textosContem);?>
-	</pre>
+	<?php if(count($textosContem)>0):?>
+		<h3>Textos Encontrados</h3>
+		<?php foreach($textosContem as $texto):?>
+		<div>
+			<?php echo $texto->idTexto;?> - <?php echo $texto->titulo;?> 
+		</div>
+		<?php endforeach;?>	
+	<?php endif;?>
 </div>
